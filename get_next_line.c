@@ -6,7 +6,7 @@
 /*   By: amamun <amamun@student.42warsaw.pl>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 18:56:43 by amamun            #+#    #+#             */
-/*   Updated: 2025/11/20 19:03:26 by amamun           ###   ########.fr       */
+/*   Updated: 2025/11/20 21:05:06 by amamun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ char	*read_join(int fd, char *stash, char *buf)
 		num_read = read (fd, buf, BUFFER_SIZE);
 		if (num_read <= 0)
 		{
-			free(buf);
 			if (num_read == 0)
 				break ;
+			free(buf);
 			free(stash);
 			return (NULL);
 		}
@@ -86,7 +86,7 @@ int	main(void)
 	int		fd;
 	char	*line;
 
-	fd = open("text.txt", O_RDONLY);
+	fd = open("poem.txt", O_RDONLY);
 	if (fd == -1)
 	{
 		perror("open");
