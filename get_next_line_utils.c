@@ -6,7 +6,7 @@
 /*   By: amamun <amamun@student.42warsaw.pl>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 20:12:41 by amamun            #+#    #+#             */
-/*   Updated: 2025/11/20 22:24:19 by amamun           ###   ########.fr       */
+/*   Updated: 2025/11/22 19:15:10 by amamun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,28 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	size_t		i;
 	char		*s1_s2_cat;
 
-	if (!s1)
-		return (ft_strdup(s2));
-	if (!s2)
-		return (ft_strdup(s1));
-	s1_len = ft_strlen(s1);
-	s2_len = ft_strlen(s2);
+	if (s1)
+		s1_len = ft_strlen(s1);
+	else
+		s1_len = 0;
+	if (s2)
+		s2_len = ft_strlen(s2);
+	else
+		s2_len = 0;
 	i = 0;
 	s1_s2_cat = (char *) malloc((s1_len + s2_len + 1) * sizeof(char));
 	if (s1_s2_cat == NULL)
 		return (NULL);
-	while (*s1 != '\0')
-		s1_s2_cat[i++] = *(s1++);
-	while (*s2 != '\0')
-		s1_s2_cat[i++] = *(s2++);
+	if (s1)
+	{
+		while (*s1 != '\0')
+			s1_s2_cat[i++] = *(s1++);
+	}
+	if (s2)
+	{
+		while (*s2 != '\0')
+			s1_s2_cat[i++] = *(s2++);
+	}
 	s1_s2_cat[i] = '\0';
 	return (s1_s2_cat);
 }

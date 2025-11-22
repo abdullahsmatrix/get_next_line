@@ -6,7 +6,7 @@
 /*   By: amamun <amamun@student.42warsaw.pl>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 18:56:43 by amamun            #+#    #+#             */
-/*   Updated: 2025/11/20 21:05:06 by amamun           ###   ########.fr       */
+/*   Updated: 2025/11/22 19:17:18 by amamun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,24 +43,28 @@ char	*read_join(int fd, char *stash, char *buf)
 	ssize_t		num_read;
 	char		*temp;
 
-	num_read = 0;
 	while (!stash || !(ft_strchr(stash, '\n')))
 	{
 		num_read = read (fd, buf, BUFFER_SIZE);
 		if (num_read <= 0)
 		{
-			if (num_read == 0)
-				break ;
-			free(buf);
-			free(stash);
-			return (NULL);
+			if (num_read < 0)
+			{
+				free(stash);
+				stash = NULL;
+			}
+			break ;
 		}
 		buf[num_read] = '\0';
 		temp = ft_strjoin(stash, buf);
 		free(stash);
+		if (temp == NULL)
+		{
+			stash = NULL;
+			break ;
+		}
 		stash = temp;
 	}
-	free(buf);
 	return (stash);
 }
 
@@ -76,6 +80,7 @@ char	*get_next_line(int fd)
 	if (buf == NULL)
 		return (NULL);
 	stash = read_join(fd, stash, buf);
+	free(buf);
 	if (!stash)
 		return (NULL);
 	return (extract_new_line(&stash));
