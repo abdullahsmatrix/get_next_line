@@ -3,6 +3,8 @@ test_gnl
 a.out
 *.o
 *.out
+Bonus/test_bonus
+Bonus/test_limits
 
 # Editor files
 .vscode/
@@ -13,3 +15,6 @@ a.out
 
 # OS files
 .DS_Store
+
+# CodeQL
+_codeql_detected_source_root
