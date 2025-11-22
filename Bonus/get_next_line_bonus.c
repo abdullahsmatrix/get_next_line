@@ -108,14 +108,19 @@ int	main(void)
 	}
 	line = get_next_line(fd);
 	printf("%s", line);
+	free(line);
 	line = get_next_line(fd2);
 	printf("%s", line);
+	free(line);
 	line = get_next_line(fd3);
 	printf("%s", line);
+	free(line);
 	line = get_next_line(fd2);
 	printf("%s", line);
+	free(line);
 	line = get_next_line(fd);
 	printf("%s", line);
+	free(line);
 	close(fd);
 	close(fd2);
 	close(fd3);

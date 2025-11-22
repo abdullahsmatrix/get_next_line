@@ -1,0 +1,20 @@
+# Compiled binaries
+test_gnl
+a.out
+*.o
+*.out
+Bonus/test_bonus
+Bonus/test_limits
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+
+# CodeQL
+_codeql_detected_source_root
