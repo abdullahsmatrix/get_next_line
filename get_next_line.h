@@ -6,7 +6,7 @@
 /*   By: amamun <amamun@student.42warsaw.pl>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 19:01:59 by amamun            #+#    #+#             */
-/*   Updated: 2025/11/20 22:23:29 by amamun           ###   ########.fr       */
+/*   Updated: 2025/11/23 20:23:03 by amamun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include <stdio.h>
 
 char	*get_next_line(int fd);
-char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strjoin(char *s1, char *s2);
 int     ft_strlen(char const *str);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strdup(const char *str);
