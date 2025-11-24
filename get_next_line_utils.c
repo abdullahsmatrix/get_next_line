@@ -6,7 +6,7 @@
 /*   By: amamun <amamun@student.42warsaw.pl>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 20:12:41 by amamun            #+#    #+#             */
-/*   Updated: 2025/11/23 21:05:29 by amamun           ###   ########.fr       */
+/*   Updated: 2025/11/24 17:58:59 by amamun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,26 @@
 
 char	*ft_strjoin(char *s1, char *s2)
 {
-	size_t i;
-    size_t j;
-    char *cat;
+	size_t	i;
+	size_t	j;
+	char	*cat;
 
-	i = 0;
-	j = 0;
-    if (!s1)
-        return ft_strdup(s2);
-    if (!s2)
-        return ft_strdup(s1);
-    cat = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-    if (!cat)
-        return NULL;
-    while (s1[i])
-    {
-        cat[i] = s1[i];
-        i++;
-    }
-    while (s2[j])
-    {
-        cat[i + j] = s2[j];
-        j++;
-    }
-    cat[i + j] = '\0';
-    free(s1);
-    return cat;
+	if (!s1)
+		return (ft_strdup(s2));
+	if (!s2)
+		return (ft_strdup(s1));
+	cat = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!cat)
+		return (NULL);
+	i = -1;
+	while (s1[++i])
+		cat[i] = s1[i];
+	j = -1;
+	while (s2[++j])
+		cat[i + j] = s2[j];
+	cat[i + j] = '\0';
+	free(s1);
+	return (cat);
 }
 
 int	ft_strlen(char const *str)
@@ -115,4 +109,3 @@ char	*ft_strchr(const char *str, int c)
 	}
 	return (NULL);
 }
-

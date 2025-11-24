@@ -6,7 +6,7 @@
 /*   By: amamun <amamun@student.42warsaw.pl>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 18:56:43 by amamun            #+#    #+#             */
-/*   Updated: 2025/11/23 21:10:32 by amamun           ###   ########.fr       */
+/*   Updated: 2025/11/24 18:16:03 by amamun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ char	*extract_new_line(char **stash)
 
 	if (!stash || !*stash)
 		return (NULL);
-
 	new_line_pos = ft_strchr(*stash, '\n');
 	if (new_line_pos)
 	{
@@ -43,7 +42,7 @@ char	*read_join(int fd, char *stash, char *buf)
 	ssize_t		num_read;
 	char		*temp;
 
-	while (!stash || !(ft_strchr(stash, '\n')))
+	while (stash && !(ft_strchr(stash, '\n')))
 	{
 		num_read = read (fd, buf, BUFFER_SIZE);
 		if (num_read <= 0)
@@ -53,11 +52,13 @@ char	*read_join(int fd, char *stash, char *buf)
 				free(stash);
 				stash = NULL;
 			}
-			break ;
+			return (stash);
 		}
 		buf[num_read] = '\0';
 		temp = ft_strjoin(stash, buf);
 		stash = temp;
+		if (!stash)
+			return (NULL);
 	}
 	return (stash);
 }
@@ -72,6 +73,13 @@ char	*get_next_line(int fd)
 	buf = (char *) malloc(BUFFER_SIZE + 1);
 	if (buf == NULL)
 		return (NULL);
+	if (!stash)
+	{
+		stash = malloc(1);
+		if (!stash)
+			return (free(buf), NULL);
+		stash[0] = '\0';
+	}
 	stash = read_join(fd, stash, buf);
 	free(buf);
 	if (!stash || *stash == '\0')
@@ -81,25 +89,24 @@ char	*get_next_line(int fd)
 	}
 	return (extract_new_line(&stash));
 }
+// int	main(void)
+// {
+// 	int		fd;
+// 	char	*line;
 
-int	main(void)
-{
-	int		fd;
-	char	*line;
-
-	fd = open("poem.txt", O_RDONLY);
-	if (fd == -1)
-	{
-		perror("open");
-		return (1);
-	}
-	line = get_next_line(fd);
-	while (line)
-	{
-		printf("%s", line);
-		free(line);
-		line = get_next_line(fd);
-	}
-	close(fd);
-	return (0);
-}
+// 	fd = open("poem.txt", O_RDONLY);
+// 	if (fd == -1)
+// 	{
+// 		perror("open");
+// 		return (1);
+// 	}
+// 	line = get_next_line(fd);
+// 	while (line)
+// 	{
+// 		printf("%s", line);
+// 		free(line);
+// 		line = get_next_line(fd);
+// 	}
+// 	close(fd);
+// 	return (0);
+// }

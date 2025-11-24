@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: amamun <amamun@student.42warsaw.pl>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/21 21:26:38 by amamun            #+#    #+#             */
-/*   Updated: 2025/11/22 18:21:31 by amamun           ###   ########.fr       */
+/*   Created: 2025/11/18 18:56:43 by amamun            #+#    #+#             */
+/*   Updated: 2025/11/24 18:15:51 by amamun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ char	*extract_new_line(char **stash)
 
 	if (!stash || !*stash)
 		return (NULL);
-
 	new_line_pos = ft_strchr(*stash, '\n');
 	if (new_line_pos)
 	{
@@ -38,93 +37,82 @@ char	*extract_new_line(char **stash)
 	return (line);
 }
 
-char	*read_join(int fd, char *stash, char *buf)
+char	*read_join(int fd, char **stash, char *buf)
 {
 	ssize_t		num_read;
 	char		*temp;
 
-	num_read = 0;
-	while (!stash || !(ft_strchr(stash, '\n')))
+	while (*stash && !(ft_strchr(*stash, '\n')))
 	{
 		num_read = read (fd, buf, BUFFER_SIZE);
 		if (num_read <= 0)
 		{
-			if (num_read == 0)
-				break ;
-			free(buf);
-			free(stash);
-			return (NULL);
+			if (num_read < 0)
+			{
+				free(*stash);
+				*stash = NULL;
+			}
+			return (*stash);
 		}
 		buf[num_read] = '\0';
-		temp = ft_strjoin(stash, buf);
-		free(stash);
-		stash = temp;
+		temp = ft_strjoin(*stash, buf);
+		*stash = temp;
+		if (!*stash)
+			return (NULL);
 	}
-	free(buf);
-	return (stash);
+	return (*stash);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*stash[OPEN_MAX];
+	static char	*stash[MAX_FILES];
 	char		*buf;
 
-	if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-
 	buf = (char *) malloc(BUFFER_SIZE + 1);
 	if (buf == NULL)
 		return (NULL);
-	stash[fd] = read_join(fd, stash[fd], buf);
 	if (!stash[fd])
+	{
+		stash[fd] = malloc(1);
+		if (!(stash[fd]))
+			return (free(buf), NULL);
+		stash[fd][0] = '\0';
+	}
+	stash[fd] = read_join(fd, &stash[fd], buf);
+	free(buf);
+	if (!stash[fd] || *stash[fd] == '\0')
+	{
+		free(stash[fd]);
+		stash[fd] = NULL;
 		return (NULL);
+	}
 	return (extract_new_line(&stash[fd]));
 }
 
-int	main(void)
-{
-	int		fd;
-	int 	fd2;
-	int		fd3;
-	char	*line;
+// int	main(void)
+// {
+// 	int		fd;
+// 	char	*line;
+// 	char	titles[3][20] = {"poem.txt", "poem 2.txt", "poem 3.txt"};
 
-	fd2 = open("poem 2.txt", O_RDONLY);
-	fd3 = open("poem 3.txt", O_RDONLY);
-	fd = open("poem.txt", O_RDONLY);
-	if (fd == -1)
-	{
-		perror("open1");
-		return (1);
-	}
-	if (fd2 == -1)
-	{
-		perror("open2");
-		return (1);
-	}
-	if (fd3 == -1)
-	{
-		perror("open2");
-		return (1);
-	}
-	line = get_next_line(fd);
-	printf("%s", line);
-	line = get_next_line(fd2);
-	printf("%s", line);
-	line = get_next_line(fd3);
-	printf("%s", line);
-	line = get_next_line(fd2);
-	printf("%s", line);
-	line = get_next_line(fd);
-	printf("%s", line);
-	close(fd);
-	close(fd2);
-	close(fd3);
-	
-	// while (line)
-	// {
-	// 	printf("%s", line);
-	// 	free(line);
-	// 	line = get_next_line(fd);
-	// }
-	return (0);
-}
+// 	for (int i = 0; i < 3; i++)
+// 	{
+// 		fd = open(titles[i], O_RDONLY);
+// 		if (fd == -1)
+// 		{
+// 			perror("open");
+// 			return (1);
+// 		}
+// 		line = get_next_line(fd);
+// 		while (line)
+// 		{
+// 			printf("%s", line);
+// 			free(line);
+// 			line = get_next_line(fd);
+// 		}
+// 		close(fd);
+// 	}
+// 	return (0);
+// }

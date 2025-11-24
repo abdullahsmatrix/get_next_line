@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: amamun <amamun@student.42warsaw.pl>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/21 21:25:44 by amamun            #+#    #+#             */
-/*   Updated: 2025/11/21 21:29:45 by amamun           ###   ########.fr       */
+/*   Created: 2025/11/18 19:01:59 by amamun            #+#    #+#             */
+/*   Updated: 2025/11/24 18:03:08 by amamun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,16 @@
 #  define BUFFER_SIZE 42
 # endif
 
+# define MAX_FILES 10000
+
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
 # include <stdio.h>
-# include <limits.h>
 
+int		ft_strlen(char const *str);
 char	*get_next_line(int fd);
-char	*ft_strjoin(char const *s1, char const *s2);
-int     ft_strlen(char const *str);
+char	*ft_strjoin(char *s1, char *s2);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strdup(const char *str);
 char	*ft_strchr(const char *str, int c);
