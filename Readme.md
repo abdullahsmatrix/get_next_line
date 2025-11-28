@@ -1,4 +1,4 @@
-📚 get_next_line
+### 📚 get_next_line
 
 A project from the 42 curriculum that teaches how to read a file line-by-line, manage persistent state across function calls, and handle memory safely in C.
 
@@ -121,4 +121,5 @@ Or bonus:
 cc -Wall -Wextra -Werror get_next_line_bonus.c get_next_line_utils.c
 
 Grade: 125% ✅
+
 
