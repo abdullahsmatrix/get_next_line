@@ -13,15 +13,13 @@ Each call returns one line terminated by \n (or EOF), reading from a file descri
 # 🧠 What This Project Teaches
 ### 1. Managing Dynamic Memory
 
-Handling repeated malloc, free, and allocations of varying sizes
-
-Preventing memory leaks
-
-Avoiding double-free and dangling pointers
+-> Handling repeated malloc, free, and allocations of varying sizes
+-> Preventing memory leaks
+-> Avoiding double-free and dangling pointers
 
 ### 2. Using Static Variables
 
-static char *stash; keeps leftover data between calls.
+-> static char *stash; keeps leftover data between calls.
 
 The tricky part was understanding why a pointer-to-pointer (char **) is needed inside functions that modify stash.
 This project forces you to confront how C actually handles pass-by-value.
@@ -29,14 +27,10 @@ This project forces you to confront how C actually handles pass-by-value.
 ### 3. Reading in Chunks
 
 read() does not guarantee:
-
-reading full lines
-
-reading until a newline
-
-returning the entire file
-
-or even reading the same number of bytes each call
+   -> reading full lines
+   -> reading until a newline
+   -> returning the entire file
+   -> or even reading the same number of bytes each call
 
 This project teaches you how to build a predictable interface over an unpredictable system call.
 
@@ -124,6 +118,7 @@ cc -Wall -Wextra -Werror get_next_line_bonus.c get_next_line_utils.c
 
 # Gen AI usage: 
 Mostly for edge case checks. Vibecode: </> 5%
+
 
 
 
