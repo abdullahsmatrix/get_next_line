@@ -1,127 +1,122 @@
 # 📚 get_next_line
 
-A project from the 42 curriculum that teaches how to read a file line-by-line, manage persistent state across function calls, and handle memory safely in C.
+**get_next_line** is a project from the 42 curriculum focused on reading a file **line-by-line**, managing **persistent state** across function calls, and handling **memory safely** in C.
 
-This project seems simple at first—"just return the next line"—but it introduces some of the most fundamental concepts in systems programming: buffers, static variables, heap allocation, pointer-to-pointer management, and handling multiple file descriptors and so on.
+Although the goal seems simple—“return the next line”—the project introduces fundamental systems-programming concepts such as buffering, static variables, heap allocation, pointer manipulation, and handling multiple file descriptors.
 
-# 🚀 Goal
+---
 
-Goal is to implement a function with the following prototype:
+## 🚀 Goal of the Project
+
+Implement the function:
+```c
 char *get_next_line(int fd);
-Each call returns one line terminated by \n (or EOF), reading from a file descriptor using a pre-defined or user-defined buffer of size "BUFFER_SIZE".
+```
+Each call should return one complete line, ending with `\n` when present, until EOF is reached.
 
-# 🧠 What This Project Teaches
+Reading must be performed using a buffer of size `BUFFER_SIZE`, either predefined or user-defined.
+
+---
+
+## 🧠 What This Project Teaches
+
 ### 1. Managing Dynamic Memory
 
--> Handling repeated malloc, free, and allocations of varying sizes
--> Preventing memory leaks
--> Avoiding double-free and dangling pointers
+- Using `malloc` and `free` repeatedly and safely.  
+- Avoiding memory leaks.  
+- Preventing double-free and dangling pointers.
 
 ### 2. Using Static Variables
 
--> static char *stash; keeps leftover data between calls.
+The function keeps leftover data between calls:
 
-The tricky part was understanding why a pointer-to-pointer (char **) is needed inside functions that modify stash.
-This project forces you to confront how C actually handles pass-by-value.
+```c
+static char *stash;
+```
+
+This introduces:  
+- The purpose of static storage.  
+- Why modifying `stash` often requires `char **`.  
+- Understanding pass-by-value in C.
 
 ### 3. Reading in Chunks
 
-read() does not guarantee:
+`read()` does **not** guarantee:
+- Reading a full line.
+- Stopping at a newline.
+- Returning consistent byte counts.
+- Returning the entire file.
 
-   -> reading full lines
-   -> reading until a newline
-   -> returning the entire file
-   -> or even reading the same number of bytes each call
-
-This project teaches you how to build a predictable interface over an unpredictable system call.
+You must build predictable behavior on top of this inconsistent system call.
 
 ### 4. Handling Edge Cases
 
-Some of the most challenging cases:
+Important edge cases include:
+- Files with no newline.
+- Files ending with a newline.
+- Empty files.
+- Very small or very large `BUFFER_SIZE`.
+- Multiple consecutive `\n`.
+- Leftover becoming an empty string (`""`).
 
-files with no newline
+This project teaches you to avoid issues like:
+- Infinite loops.
+- Premature EOF.
+- Returning `NULL` too early.
+- Segmentation faults due to pointer misuse.
 
-files that end with a newline
+### 5. Bonus: Multi-FD Support
 
-empty files
+GNL function to support multiple file descriptors:
 
-extremely small BUFFER_SIZE (e.g., 1)
+```c
+static char *stash[OPEN_MAX];
+```
 
-extremely large BUFFER_SIZE
+The bonus includes:
+- Tracking state independently for each FD.
+- Preventing data mixing.
+- Careful cleanup logic.
 
-files containing multiple \n next to each other
+---
 
-leftover becoming an empty string ("")
+## 🏗️ How It Works
 
-These cases reveal subtle bugs such as:
+1. **Initial Call**  
+   `get_next_line(fd)` validates the input and prepares internal state.
 
-infinite loops
+2. **read_join()**  
+   Repeatedly reads into a buffer -> Appends new data to stash -> Stops when a newline or EOF is encountered.
 
-premature EOF
+3. **extract_new_line()**  
+   Splits the stored data into:
+   - A full line (returned to the user)
+   - Leftover data (saved for the next call)
 
-returning NULL too early
+   This step often requires pointer-to-pointer logic to safely update `stash`.
 
-segmentation faults due to pointer misuse
+---
 
-### 5. Bonus: Multiple File Descriptors
+## 🧯 Challenges I Faced
 
-The bonus requires supporting multiple files open in multiple file descriptors without mixing data between them.
-This introduces deeper ideas:
+- Understanding when to free `stash` and when to retain it.
+- Ensuring the buffer is freed at exactly the right moment.
+- Avoiding premature `NULL` return at EOF.
+- Correctly handling an empty leftover string.
+- Making `extract_new_line()` modify the original stash.
+- Bonus: isolating `stash` for each file descriptor.
 
-arrays of static pointers (static char *stash[OPEN_MAX])
+This project teaches not only coding, but also how to think like you're implementing a C library function. It involves brainstorming to solve problems, aligning variables, functions, loops, and conditions so that they work as expected.
 
-isolating state for each FD
+---
 
-careful cleanup logic
+## 🏅 Grade
 
-# 🏗️ How It Works
-### 1. Get_next_line is called & fd as an arguement is passed into teh function.
-   The function checks for edge cases and correct validate arguement that is been passed.
+**125% ✅**
 
-### 2. read_join()
-Keeps reading into a buffer
-Joins new data to the stash
-Stops only when a newline is found or EOF is reached
+---
 
-### 3. extract_new_line()
-Splits stash into: i) the next full line to return
-                  ii)leftover that stays for next call. 
-This part is where pointer-to-pointer logic becomes crucial.
+## 🤖 Gen AI Usage
 
-# 🧯 Challenges I Faced
-
-Understanding when to free stash and when to keep it
-
-Realizing buffer must be freed once, at the right time
-
-The classic bug: returning NULL too early at EOF
-
-Handling an empty leftover string ("") properly
-
-Making extract_new_line modify the original stash using char **
-
-Bonus: making sure stash is separate for each file descriptor
-
-This project teaches you not just how to code, but how to think like someone writing a library function in C. Solving problem, keeping track all the variable, loop, conditions in line. 
-
-
-
-# Compile using:
-
-cc -Wall -Wextra -Werror get_next_line.c get_next_line_utils.c
-
-
-Or bonus:
-
-cc -Wall -Wextra -Werror get_next_line_bonus.c get_next_line_utils.c
-
-# Grade: 125% ✅
-
-# Gen AI usage: 
-Mostly for edge case checks. Vibecode: </> 5%
-
-
-
-
-
-
+- Used mainly for edge-case verification
+- Vibecode usage: 5%
