@@ -27,6 +27,7 @@ This project forces you to confront how C actually handles pass-by-value.
 ### 3. Reading in Chunks
 
 read() does not guarantee:
+
    -> reading full lines
    -> reading until a newline
    -> returning the entire file
@@ -118,6 +119,7 @@ cc -Wall -Wextra -Werror get_next_line_bonus.c get_next_line_utils.c
 
 # Gen AI usage: 
 Mostly for edge case checks. Vibecode: </> 5%
+
 
 
 
